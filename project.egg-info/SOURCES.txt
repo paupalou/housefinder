@@ -1,0 +1,12 @@
+setup.py
+housefinder/__init__.py
+housefinder/items.py
+housefinder/pipelines.py
+housefinder/settings.py
+housefinder/spiders/__init__.py
+housefinder/spiders/houses_spider.py
+project.egg-info/PKG-INFO
+project.egg-info/SOURCES.txt
+project.egg-info/dependency_links.txt
+project.egg-info/entry_points.txt
+project.egg-info/top_level.txt
