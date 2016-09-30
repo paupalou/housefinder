@@ -1,0 +1,15 @@
+<!doctype html>
+<title>housefinder</title>
+{% for error in errors %}
+  <p>{{error}}</p>
+{% endfor %}
+
+<div class="container">
+  <h2> {{ results }} results </h2>
+  {% for house in items %}
+  <div>
+    {{house.name}}
+    <a class="button" href="{{house.link}}">Go</a>
+  </div>
+  {% endfor %}
+</div>

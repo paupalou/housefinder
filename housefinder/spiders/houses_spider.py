@@ -19,6 +19,23 @@ class HousesSpider(scrapy.Spider):
         self.page_counter += 1
         return len(page.xpath('//li[@class="next"]')) > 0
 
+    def create_item(self, house):
+        info = house.css('.item-info-container')
+
+        item = HouseItem()
+        item['id'] = house.xpath('div/@data-adid').extract_first()
+        item['provider'] = 'idealista'
+        item['name'] = self.text(info, 'a')
+        item['price'] = self.text(info, './/span[@class="item-price"]')
+        item['rooms'] = self.text(info, 'span[@class="item-detail"][1]')
+        item['meters'] = self.text(info, 'span[@class="item-detail"][2]')
+        item['floor'] = self.text(info, 'span[@class="item-detail"][3]')
+        item['link'] = "https://www.idealista.com/inmueble/{}/".format(
+            item['id']
+        )
+
+        return item
+
     def parse(self, response):
         main = response.xpath('//div[@id="main-content"]').css(
                 '.items-container'
@@ -26,21 +43,9 @@ class HousesSpider(scrapy.Spider):
         houses = main.xpath('.//article[not(@class)]')
 
         for house in houses:
-            info = house.css('.item-info-container')
+            yield self.create_item(house)
 
-            item = HouseItem()
-            item['id'] = house.xpath('div/@data-adid').extract_first()
-            item['name'] = self.text(info, 'a')
-            item['price'] = self.text(info, './/span[@class="item-price"]')
-            item['rooms'] = self.text(info, 'span[@class="item-detail"][1]')
-            item['meters'] = self.text(info, 'span[@class="item-detail"][2]')
-            item['floor'] = self.text(info, 'span[@class="item-detail"][3]')
-            item['link'] = "https://www.idealista.com/inmueble/{}/".format(
-                item['id']
-            )
-            yield item
-
-        if self.page_counter < 50 and self.exists_next_page(response):
+        if self.page_counter < 21 and self.exists_next_page(response):
             next_page_anchor = response.xpath('//li[@class="next"]/a/@href')
             next_page = response.urljoin(next_page_anchor.extract_first())
             yield scrapy.Request(next_page, callback=self.parse)

@@ -13,7 +13,7 @@ BOT_NAME = 'housefinder'
 
 SPIDER_MODULES = ['housefinder.spiders']
 NEWSPIDER_MODULE = 'housefinder.spiders'
-
+MONGO_URI = 'mongodb://localhost'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'housefinder (+http://www.yourdomain.com)'
@@ -69,7 +69,8 @@ DEFAULT_REQUEST_HEADERS = {
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'housefinder.pipelines.HousefinderPipeline': 300,
+   'housefinder.pipelines.JsonPipeline': 300,
+   'housefinder.pipelines.MongoPipeline': 400,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
