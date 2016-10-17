@@ -41,6 +41,9 @@ class MongoPipeline(object):
     def process_item(self, item, spider):
         item['meters'] = int(item['meters'])
         item['rooms'] = int(item['rooms'])
-        item['price'] = int(item['price'].replace('.', ''))
+        if type(item['price']) is str:
+            item['price'] = int(item['price'].replace('.', ''))
+        else:
+            item['price'] = item['price']
         self.db[self.collection_name].insert(dict(item))
         return item

@@ -44,7 +44,7 @@ COOKIES_ENABLED = False
 DEFAULT_REQUEST_HEADERS = {
    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
    'Accept-Language': 'en',
-   'Referer': 'https://www.idealista.com/venta-viviendas/palma-de-mallorca-balears-illes/',
+   # 'Referer': 'https://www.idealista.com/venta-viviendas/palma-de-mallorca-balears-illes/',
    'Connection': 'keep-alive'
 }
 

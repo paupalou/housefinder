@@ -6,10 +6,24 @@
 
 <div class="container">
   <h2> {{ results }} results </h2>
-  {% for house in items %}
-  <div>
-    {{house.name}}
-    <a class="button" href="{{house.link}}">Go</a>
-  </div>
-  {% endfor %}
+  <table>
+    <thead>
+      <tr>
+        <td> name </td>
+        <td> meters </td>
+        <td> price </td>
+        <td> link </td>
+      </tr>
+    </thead>
+    <tbody>
+      {% for house in items %}
+        <tr>
+          <td> {{house.name}} </td>
+          <td> {{house.meters}} </td>
+          <td> {{house.price}} </td>
+          <td> <a class='button' href="{{house.link}}">Go</a> </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>

@@ -2,11 +2,13 @@ import scrapy
 from housefinder.items import HouseItem
 
 
-class HousesSpider(scrapy.Spider):
-    name = 'houses'
+class IdealistaSpider(scrapy.Spider):
+    name = 'idealista'
     page_counter = 1
+    limit = 25
+    HOST = 'http://www.idealista.com'
     start_urls = [
-        'http://www.idealista.com/venta-viviendas/palma-de-mallorca-balears-illes/'
+        HOST+'/alquiler-viviendas/palma-de-mallorca-balears-illes/'
     ]
 
     def text(self, container, rule):
@@ -45,7 +47,7 @@ class HousesSpider(scrapy.Spider):
         for house in houses:
             yield self.create_item(house)
 
-        if self.page_counter < 21 and self.exists_next_page(response):
+        if self.page_counter < self.limit and self.exists_next_page(response):
             next_page_anchor = response.xpath('//li[@class="next"]/a/@href')
             next_page = response.urljoin(next_page_anchor.extract_first())
             yield scrapy.Request(next_page, callback=self.parse)
