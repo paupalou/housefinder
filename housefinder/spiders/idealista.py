@@ -5,7 +5,7 @@ from housefinder.items import HouseItem
 class IdealistaSpider(scrapy.Spider):
     name = 'idealista'
     page_counter = 1
-    limit = 25
+    limit = 50
     HOST = 'http://www.idealista.com'
     start_urls = [
         HOST+'/alquiler-viviendas/palma-de-mallorca-balears-illes/'

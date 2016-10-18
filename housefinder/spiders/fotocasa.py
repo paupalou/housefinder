@@ -8,7 +8,7 @@ class FotocasaSpider(scrapy.Spider):
     allowed_domains = ['fotocasa.es']
     HOST = 'http://www.fotocasa.es/'
     page_counter = 1
-    limit = 25
+    limit = 50
 
     def start_requests(self):
         querystring = '?opi=36&ts=Mallorca%20&l=724,4,7,223,0,0,0,0,0'

@@ -36,7 +36,9 @@ def filter_results(filter, type, quantity):
     errors = []
     if _check_params(errors):
         condition = {filter: {'$'+type: quantity}}
-        houses = mongo.db.houses.find(condition)
+        houses = mongo.db.houses.find(condition).sort(
+                ''+filter, 1
+                )
         results = houses.count()
     else:
         houses = []

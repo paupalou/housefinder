@@ -1,6 +1,7 @@
 import json
 import codecs
 import pymongo
+import re
 
 
 class JsonPipeline(object):
@@ -39,11 +40,22 @@ class MongoPipeline(object):
         self.client.close()
 
     def process_item(self, item, spider):
-        item['meters'] = int(item['meters'])
-        item['rooms'] = int(item['rooms'])
-        if type(item['price']) is str:
-            item['price'] = int(item['price'].replace('.', ''))
-        else:
-            item['price'] = item['price']
-        self.db[self.collection_name].insert(dict(item))
+        try:
+            item['meters'] = int(item['meters'])
+            item['rooms'] = int(item['rooms'])
+            if type(item['price']) is str:
+                item['price'] = int(item['price'].replace('.', ''))
+            else:
+                item['price'] = item['price']
+        except Exception:
+            number = re.compile(r'(\d+)')
+            item['meters'] = int(number.findall(item['meters']).pop())
+            item['rooms'] = int(number.findall(item['rooms']).pop())
+            if type(item['price']) is str:
+                item['price'] = int(item['price'].replace('.', ''))
+            else:
+                item['price'] = item['price']
+        finally:
+            self.db[self.collection_name].insert(dict(item))
+
         return item
