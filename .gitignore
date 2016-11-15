@@ -1,6 +1,6 @@
-*.json
 *.pyc
 *.jl
 build/
 __pycache__/
 project.egg-info/
+*.yml

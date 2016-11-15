@@ -1,11 +1,11 @@
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
-from housefinder.spiders.fotocasa import FotocasaSpider
-from housefinder.spiders.idealista import IdealistaSpider
+from housefinder.spiders.provider1 import Provider1Spider
+from housefinder.spiders.provider2 import Provider2Spider
 
 process = CrawlerProcess(get_project_settings())
 
-process.crawl(FotocasaSpider)
-process.crawl(IdealistaSpider)
+process.crawl(Provider1Spider)
+process.crawl(Provider2Spider)
 
 process.start()

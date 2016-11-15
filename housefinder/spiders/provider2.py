@@ -1,20 +1,19 @@
-import scrapy
 import re
+
+from scrapy import Spider, Request
 from housefinder.items import HouseItem
+from housefinder.config import Provider
 
 
-class FotocasaSpider(scrapy.Spider):
-    name = 'fotocasa'
-    allowed_domains = ['fotocasa.es']
-    HOST = 'http://www.fotocasa.es/'
+class Provider2Spider(Spider):
+    provider = Provider(2)
+    name = provider.get('name')
+    allowed_domains = [provider.get('allowed_domain')]
+    HOST = provider.get('host')
     page_counter = 1
-    limit = 50
 
     def start_requests(self):
-        querystring = '?opi=36&ts=Mallorca%20&l=724,4,7,223,0,0,0,0,0'
-        querystring += 'bti=2&tti=3&mode=1&cu=es-es'
-        url = self.HOST+'/search/results.aspx'+querystring
-        yield scrapy.Request(url, self.parse)
+        yield Request(self.provider.get('start_url'), self.parse)
 
     def exists_next_page(self, page):
         self.page_counter += 1
@@ -66,7 +65,7 @@ class FotocasaSpider(scrapy.Spider):
         house_info = _get_info()
         item['id'] = _get_id()
         item['link'] = _get_link()
-        item['provider'] = 'fotocasa'
+        item['provider'] = self.name
         item['name'] = self.text(house, 'contains(@id, "ubication")')
         item['floor'] = house_info[0]
         item['meters'] = house_info[1]
@@ -82,9 +81,9 @@ class FotocasaSpider(scrapy.Spider):
         for house in house_boxes:
             yield self.create_item(house)
 
-        if self.page_counter < self.limit and self.exists_next_page(response):
+        if self.exists_next_page(response):
             next_page_anchor = response.xpath(
                     '//li[@class="pagination-next"]/a/@href'
                     )
             next_page = response.urljoin(next_page_anchor.extract_first())
-            yield scrapy.Request(next_page, callback=self.parse)
+            yield Request(next_page, callback=self.parse)
