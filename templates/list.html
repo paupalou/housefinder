@@ -1,40 +1,29 @@
-<!doctype html>
-<head>
-  <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
-  <style type="text/css" media="screen">
-    body {
-      padding:2rem;
-    }
-  </style>
-</head>
-
-<title>housefinder</title>
-{% for error in errors %}
-  <p>{{error}}</p>
-{% endfor %}
-
-<div class="container">
-  <h2> {{ results }} results </h2>
-  <table class="pure-table pure-table-horizontal">
-    <thead>
-      <tr>
-        <td> <b>name</b> </td>
-        <td> <b>meters</b> </td>
-        <td> <b>rooms</b> </td>
-        <td> <b>price</b> </td>
-        <td> <b>link</b> </td>
-      </tr>
-    </thead>
-    <tbody>
-      {% for house in items %}
+{% extends "base.html" %}
+{% block content %}
+  <div class="container">
+    <div>{% block topbar %}{% endblock %}</div>
+    <h2> {{ results }} results </h2>
+    <table class="pure-table pure-table-horizontal">
+      <thead>
         <tr>
-          <td> {{house.name}} </td>
-          <td> {{house.meters}} </td>
-          <td> {{house.rooms}} </td>
-          <td> {{house.price}} </td>
-          <td> <a class='button' href="{{house.link}}">Go</a> </td>
+          <td> <b>name</b> </td>
+          <td> <b>meters</b> </td>
+          <td> <b>rooms</b> </td>
+          <td> <b>price</b> </td>
+          <td> <b>link</b> </td>
         </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
+      </thead>
+      <tbody>
+        {% for house in items %}
+          <tr>
+            <td> {{house.name}} </td>
+            <td> {{house.meters}} </td>
+            <td> {{house.rooms}} </td>
+            <td> {{house.price}} </td>
+            <td> <a class='button' href="{{house.link}}">Go</a> </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

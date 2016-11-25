@@ -1,0 +1,24 @@
+<!doctype html>
+<head>
+  <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+  <style type="text/css" media="screen">
+    #content {
+      padding:2rem;
+    }
+  </style>
+</head>
+
+<title>housefinder</title>
+{% for error in errors %}
+  <p>{{error}}</p>
+{% endfor %}
+
+<body>
+  <div id="content">{% block content %}{% endblock %}</div>
+  <div id="footer">
+    {% block footer %}
+      Copyright 2016 by paupalou
+    {% endblock %}
+  </div>
+</body>
+
