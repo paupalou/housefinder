@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
   <div class="container">
-    <div>{% block topbar %}{% endblock %}</div>
+    <div>{% block topbar %} {{ message }} {% endblock %}</div>
     <h2> {{ results }} results </h2>
     <table class="pure-table pure-table-horizontal">
       <thead>

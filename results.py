@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, session, request
 from flask_pymongo import PyMongo
 from oauth2client import client
+from user import User
 
 from uuid import uuid4
 
@@ -21,7 +22,7 @@ filter_fields = ['price', 'meters', 'rooms']
 filter_types = ['lt', 'gt']
 
 
-def list(items, errors=[]):
+def _list(items, errors=[]):
     return render_template(
             'list.html',
             items=items,
@@ -30,26 +31,26 @@ def list(items, errors=[]):
             )
 
 
-@app.route('/housefinder/login')
-def login():
-    if __check_auth():
-        return redirect(url_for('welcome'))
-    else:
-        return redirect(url_for('auth'))
-
-
-def __credentials():
+def _credentials():
     return client.OAuth2Credentials.from_json(session['credentials'])
 
 
-def __check_auth():
+def _check_auth():
     if 'credentials' not in session:
         return False
 
-    if __credentials().access_token_expired:
+    if _credentials().access_token_expired:
         return False
 
     return True
+
+
+@app.route('/housefinder/login')
+def login():
+    if _check_auth():
+        return redirect(url_for('welcome'))
+    else:
+        return redirect(url_for('auth'))
 
 
 @app.route('/housefinder/auth')
@@ -73,11 +74,12 @@ def auth():
 
 @app.route('/housefinder/welcome')
 def welcome():
-    if __check_auth():
+    if _check_auth():
         items = mongo.db.houses.find()
+        user = User(_credentials().client_id)
         return render_template(
                 'welcome.html',
-                user=__credentials().client_id,
+                user=user.user_id,
                 items=items,
                 results=items.count()
                 )
@@ -87,7 +89,17 @@ def welcome():
 
 @app.route('/housefinder')
 def all():
-    return list(mongo.db.houses.find())
+    if _check_auth():
+        items = mongo.db.houses.find()
+        user = User(_credentials().client_id)
+        return render_template(
+                'welcome.html',
+                user=user.user_id,
+                items=items,
+                results=items.count()
+                )
+    else:
+        return _list(mongo.db.houses.find())
 
 
 @app.route('/housefinder/<filter>/<type>/<int:quantity>')
